@@ -15,10 +15,24 @@ import { createClient } from "@/lib/supabase/server";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+/**
+ * Only allow same-origin, app-relative redirect targets. `next` comes from the
+ * (attacker-controllable) callback query string, so anything that could escape
+ * the origin — absolute URLs, protocol-relative `//host`, or backslash-escaped
+ * `/\host` (which browsers normalize to `//host`) — is rejected and falls back
+ * to the dashboard. This closes the open-redirect.
+ */
+function safeNext(raw: string | null): string {
+  if (!raw) return "/dashboard";
+  if (!raw.startsWith("/")) return "/dashboard"; // must be path-absolute
+  if (raw.startsWith("//") || raw.startsWith("/\\")) return "/dashboard";
+  return raw;
+}
+
 export async function GET(request: Request): Promise<Response> {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/dashboard";
+  const next = safeNext(searchParams.get("next"));
 
   if (code) {
     const supabase = await createClient();
