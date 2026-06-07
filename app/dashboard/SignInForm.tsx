@@ -4,18 +4,14 @@ import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/browser";
 
 /**
- * Email magic-link sign-in (invite-only).
- *
- * Calls supabase.auth.signInWithOtp with emailRedirectTo -> /auth/callback.
- * Account creation is gated in the database by the mcp_allowed_emails
- * allowlist, so a magic link is only usable by approved emails; everyone
- * else is rejected when their user row would be created.
+ * Email magic-link sign-in (invite-only). Account creation is gated in the
+ * database by the mcp_allowed_emails allowlist. An optional `next` path routes
+ * the post-login redirect (via /auth/callback) somewhere other than /dashboard
+ * (e.g. back to an /oauth/consent request).
  */
-export default function SignInForm() {
+export default function SignInForm({ next }: { next?: string }) {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle",
-  );
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [message, setMessage] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -25,11 +21,9 @@ export default function SignInForm() {
     setMessage("");
     try {
       const supabase = createClient();
-      const redirectTo = `${window.location.origin}/auth/callback`;
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: { emailRedirectTo: redirectTo },
-      });
+      const base = `${window.location.origin}/auth/callback`;
+      const emailRedirectTo = next ? `${base}?next=${encodeURIComponent(next)}` : base;
+      const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo } });
       if (error) {
         setStatus("error");
         setMessage(
