@@ -1,30 +1,34 @@
 {
-  "name": "stock-market-mcp",
-  "version": "1.0.0",
-  "description": "MCP server for comprehensive stock market data analysis and trading intelligence",
-  "main": "dist/index.js",
-  "type": "module",
+  "name": "app",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "tsx src/index.ts",
-    "inspect": "npx @modelcontextprotocol/inspector dist/index.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test:e2e": "vitest run tests/e2e"
   },
-  "keywords": ["mcp", "stock-market", "trading", "analysis"],
-  "author": "",
-  "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0",
-    "axios": "^1.7.2",
-    "date-fns": "^3.6.0",
-    "technicalindicators": "^3.1.0",
-    "zod": "^3.23.8",
-    "node-cache": "^5.1.2",
-    "dotenv": "^16.4.5"
+    "@modelcontextprotocol/sdk": "1.26.0",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.107.0",
+    "jose": "^5.10.0",
+    "mcp-handler": "1.1.0",
+    "next": "16.2.7",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "yahoo-finance2": "^3.15.2",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@types/node": "^20.14.0",
-    "tsx": "^4.15.0",
-    "typescript": "^5.4.5"
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.7",
+    "tsx": "^4.22.4",
+    "typescript": "^5",
+    "vitest": "^2.1.9"
   }
 }
