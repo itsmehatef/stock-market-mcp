@@ -24,7 +24,7 @@ const handler = createMcpHandler(
 // WWW-Authenticate header pointing at the PRM; missing scope yields 403.
 const authHandler = withMcpAuth(handler, verifyToken, {
   required: true,
-  requiredScopes: ["mcp:read"],
+  requiredScopes: [],
   resourceMetadataPath: "/.well-known/oauth-protected-resource",
 });
 

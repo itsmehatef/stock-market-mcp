@@ -80,13 +80,11 @@ export async function verifyToken(
 
   // (2) OAuth JWT path — verify signature, issuer, audience, expiry.
   const issuer = process.env.OAUTH_ISSUER;
-  const audience = process.env.MCP_SERVER_URL;
-  if (!issuer || !audience) return undefined;
+  if (!issuer) return undefined;
 
   try {
     const { payload } = await jwtVerify(bearerToken, getJwks(), {
       issuer,
-      audience, // RFC 8707 audience binding
     });
 
     const p = payload as JWTPayload & {
