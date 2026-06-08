@@ -26,7 +26,7 @@ export function buildPrmResponse(): Response {
     authServerUrls: [issuer],
     resourceUrl,
     additionalMetadata: {
-      scopes_supported: ["mcp:read"],
+      scopes_supported: ["openid"],
       bearer_methods_supported: ["header"],
       resource_name: "Stock Market MCP",
     },
